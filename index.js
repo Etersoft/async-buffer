@@ -239,7 +239,7 @@ AsyncBuffer.prototype.isEmpty = function(){
 };
 
 if (typeof define === 'function' && define.amd) {
-    define("AsyncBuffer", [], {
+    define("async-buffer", [], {
         AsyncBuffer: AsyncBuffer
     });
 } else if ('undefined' !== typeof exports && 'undefined' !== typeof module) {
