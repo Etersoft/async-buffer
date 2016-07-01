@@ -1,0 +1,29 @@
+{
+  "name": "async-buffer",
+  "version": "1.0.0",
+  "description": "Async buffer",
+  "main": "buffer.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eterosft/async-buffer.git"
+  },
+  "keywords": [
+    "buffer",
+    "async"
+  ],
+  "author": "missingdays",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/etersoft/async-buffer/issues"
+  },
+  "homepage": "https://github.com/etersoft/async-buffer#readme",
+  "dependencies": {
+    "chai": "^3.5.0"
+  }
+}
