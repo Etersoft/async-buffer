@@ -1,25 +1,25 @@
 
 var assert = require("chai").assert;
 
-var Buffer = require("../index");
+var AsyncBuffer = require("../index").AsyncBuffer;
 
 var MultipleDone = require("./utils").MultipleDone;
 
-describe("Buffer", ()=>{
+describe("AsyncBuffer", ()=>{
 
     it('timeout. Default', function(){
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
         assert.equal(buffer.getTimeout(), 100);
     });
 
     it('timeout. Set', function(){
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
         buffer.setTimeout(500);
         assert.equal(buffer.getTimeout(), 500);
     });
 
     it('has. single', function(){
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         buffer.onLastFinish('single', function(){});
 
@@ -28,7 +28,7 @@ describe("Buffer", ()=>{
     });
 
     it('has. multi', function(){
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         buffer.onLastFinish('one', function(){});
         buffer.onLastFinish('two', function(){});
@@ -43,7 +43,7 @@ describe("Buffer", ()=>{
 
     it('calls back', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         buffer.onFinish(function(){
             assert.ok(true);
@@ -53,7 +53,7 @@ describe("Buffer", ()=>{
 
     it('calls all back', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var m = new MultipleDone(3);
 
@@ -73,7 +73,7 @@ describe("Buffer", ()=>{
 
     it('calls named callback', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         buffer.onLastFinish('test', function(){
             assert.ok(true);
@@ -83,7 +83,7 @@ describe("Buffer", ()=>{
 
     it('calls only last named callback', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         buffer.onLastFinish('test', function(){
             assert.ok(false);
@@ -98,7 +98,7 @@ describe("Buffer", ()=>{
     });
 
     it('calls last callback', function(done){
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
         buffer.afterFinish(function(){
             assert.ok(true);
             done();
@@ -106,7 +106,7 @@ describe("Buffer", ()=>{
     });
 
     it('calls all last callback', function(done){
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var m = new MultipleDone(3);
 
@@ -125,7 +125,7 @@ describe("Buffer", ()=>{
     });
 
     it('calls when timeout is 0', function(done){
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var m = new MultipleDone(3);
 
@@ -149,7 +149,7 @@ describe("Buffer", ()=>{
 
     it('calls multiple named callbacks', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var m = new MultipleDone(3);
 
@@ -169,7 +169,7 @@ describe("Buffer", ()=>{
 
     it('calls unnamed, named and last callbacks', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var m = new MultipleDone(5);
 
@@ -197,7 +197,7 @@ describe("Buffer", ()=>{
 
     it('handles recursive callbacks', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var m = new MultipleDone(3);
 
@@ -217,7 +217,7 @@ describe("Buffer", ()=>{
 
     it('handles recursive named callbacks', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var m = new MultipleDone(3);
 
@@ -237,7 +237,7 @@ describe("Buffer", ()=>{
 
     it('handles multiple recursive callbacks that overwrite each other', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var m = new MultipleDone(2);
 
@@ -261,7 +261,7 @@ describe("Buffer", ()=>{
 
     it('calls unnamed callbacks in order they are given', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var i = 0;
 
@@ -283,7 +283,7 @@ describe("Buffer", ()=>{
 
     it('calls last callbacks in order they are given', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var i = 0;
 
@@ -305,7 +305,7 @@ describe("Buffer", ()=>{
 
     it('calls named callbacks before unnamed', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var i = 0; // counter of order
 
@@ -329,7 +329,7 @@ describe("Buffer", ()=>{
     it('calls last callbacks last', function(done){
         var i = 0;
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         buffer.afterFinish(function(){
             assert.equal(i, 3);
@@ -354,7 +354,7 @@ describe("Buffer", ()=>{
 
     it('handles multiple recursive mixed callbacks', function(done){
 
-        var buffer = new Buffer();
+        var buffer = new AsyncBuffer();
 
         var m = new MultipleDone(5);
 

@@ -1,10 +1,10 @@
 /**
- * @classdesc Buffer class. Used to cache multiple function calls and
+ * @classdesc AsyncBuffer class. Used to cache multiple function calls and
  * run them after specified timeout.
  * 
- * @class module:buffer~Buffer
+ * @class module:buffer~AsyncBuffer
  */
-function Buffer(){
+function AsyncBuffer(){
     this.waiting = false;
     this.callbacks = [];
     this.namedCallbacks = {};
@@ -16,10 +16,10 @@ function Buffer(){
  * Starts buffer timer. After that timer fires, all callbacks that are
  * in the queues will be executed.
  * 
- * @method module:buffer~Buffer#start
+ * @method module:buffer~AsyncBuffer#start
  * @private
  */
-Buffer.prototype.start = function(){
+AsyncBuffer.prototype.start = function(){
 
     var $$ = this;
 
@@ -39,7 +39,7 @@ Buffer.prototype.start = function(){
 /**
  * If callback is function, calls it.
  * 
- * @method module:buffer~Buffer#resolveCallbacks
+ * @method module:buffer~AsyncBuffer#resolveCallbacks
  * @private
  * @param {Function} callback
  */
@@ -52,7 +52,7 @@ function resolveCallback(callback){
 /**
  * Resolves all callbacks in given array.
  * 
- * @method module:buffer~Buffer#resolveCallbacks
+ * @method module:buffer~AsyncBuffer#resolveCallbacks
  * @param {Function[]} callbacks - Array of callbacks
  */
 function resolveCallbacks(callbacks){
@@ -64,10 +64,10 @@ function resolveCallbacks(callbacks){
 /**
  * Resolves all named callbacks.
  * 
- * @method module:buffer~Buffer#resolveNamedCallbacks
+ * @method module:buffer~AsyncBuffer#resolveNamedCallbacks
  * @private
  */
-Buffer.prototype.resolveNamedCallbacks = function(){
+AsyncBuffer.prototype.resolveNamedCallbacks = function(){
     var $$ = this;
 
     for(var id in $$.namedCallbacks){
@@ -80,10 +80,10 @@ Buffer.prototype.resolveNamedCallbacks = function(){
 /**
  * Resolves all main callbacks.
  * 
- * @method module:buffer~Buffer#resolveMainCallbacks
+ * @method module:buffer~AsyncBuffer#resolveMainCallbacks
  * @private
  */
-Buffer.prototype.resolveMainCallbacks = function(){
+AsyncBuffer.prototype.resolveMainCallbacks = function(){
     var $$ = this;
     resolveCallbacks($$.callbacks);
 };
@@ -91,10 +91,10 @@ Buffer.prototype.resolveMainCallbacks = function(){
 /**
  * Resolves all callbacks that should be resolved last.
  * 
- * @method module:buffer~Buffer#resolveLastCallbacks
+ * @method module:buffer~AsyncBuffer#resolveLastCallbacks
  * @private
  */
-Buffer.prototype.resolveLastCallbacks = function(){
+AsyncBuffer.prototype.resolveLastCallbacks = function(){
     var $$ = this;
     resolveCallbacks($$.lastCallbacks);
 };
@@ -102,11 +102,11 @@ Buffer.prototype.resolveLastCallbacks = function(){
 /**
  * Resolves all callbacks.
  * 
- * @method module:buffer~Buffer#finish
+ * @method module:buffer~AsyncBuffer#finish
  * @private
  */
 
-Buffer.prototype.finish = function(){
+AsyncBuffer.prototype.finish = function(){
     var $$ = this;
 
     $$.waiting = false;
@@ -119,10 +119,10 @@ Buffer.prototype.finish = function(){
 /**
  * Resolves while buffer is not empty, but not more than 10 times.
  * 
- * @method module:buffer~Buffer#finishAll
+ * @method module:buffer~AsyncBuffer#finishAll
  * @returns {Number} How many times 'finish' was called
  */
-Buffer.prototype.finishAll = function(){
+AsyncBuffer.prototype.finishAll = function(){
     var $$ = this;
     var counter = 0;
 
@@ -137,10 +137,10 @@ Buffer.prototype.finishAll = function(){
 /**
  * Adds callback to main queue and starts timer.
  * 
- * @method module:buffer~Buffer#onFinish 
+ * @method module:buffer~AsyncBuffer#onFinish 
  * @param {Function} callback - Callback that will be added to queue
  */
-Buffer.prototype.onFinish = function(callback){
+AsyncBuffer.prototype.onFinish = function(callback){
     var $$ = this;
     $$.start();
     $$.callbacks.push(callback);
@@ -152,13 +152,13 @@ Buffer.prototype.onFinish = function(callback){
  * when we need to eliminate multiple redraws caused by several changes
  * over a small period of time.
  * 
- * @method module:buffer~Buffer#onLastFinish
+ * @method module:buffer~AsyncBuffer#onLastFinish
  * @param {String} id - ID of callback. If another callback with the
  * same id was already added after last finish() call, it will be
  * replace with the new one.
  * @param {Function} callback - Callback that will be added to queue
  */
-Buffer.prototype.onLastFinish = function(id, callback){
+AsyncBuffer.prototype.onLastFinish = function(id, callback){
     var $$ = this;
     $$.start();
     $$.namedCallbacks[id] = callback;
@@ -168,10 +168,10 @@ Buffer.prototype.onLastFinish = function(id, callback){
  * Adds callback to queue that resolves after all other callbacks were
  * called and starts timer.
  * 
- * @method module:buffer~Buffer#afterFinish
+ * @method module:buffer~AsyncBuffer#afterFinish
  * @param {Function} callback - Callback that will be added to queue.
  */
-Buffer.prototype.afterFinish = function(callback){
+AsyncBuffer.prototype.afterFinish = function(callback){
     var $$ = this;
     $$.start();
     $$.lastCallbacks.push(callback);
@@ -181,11 +181,11 @@ Buffer.prototype.afterFinish = function(callback){
  * Returns whether or not there is a callback in the named callbacks
  * queue for given ID (see onLastFinish() method).
  * 
- * @method module:buffer~Buffer#has
+ * @method module:buffer~AsyncBuffer#has
  * @param {String} id - ID of callback
  * @return {Boolean} - Is in the queue?
  */
-Buffer.prototype.has = function(id){
+AsyncBuffer.prototype.has = function(id){
     var $$ = this;
     return $$.namedCallbacks[id] !== undefined;
 };
@@ -193,13 +193,13 @@ Buffer.prototype.has = function(id){
 /**
  * Sets timeout after which buffer should fire.
  * 
- * @method module:buffer~Buffer#setTimeout
+ * @method module:buffer~AsyncBuffer#setTimeout
  * @param {Number} timeout - New timeout value
  */
-Buffer.prototype.setTimeout = function(timeout){
+AsyncBuffer.prototype.setTimeout = function(timeout){
     var $$ = this;
     if(isNaN(timeout)){
-        throw new Error('Buffer timeout should be a number');
+        throw new Error('AsyncBuffer timeout should be a number');
     }
 
     $$.timeout = timeout;
@@ -209,10 +209,10 @@ Buffer.prototype.setTimeout = function(timeout){
 /**
  * Returns current buffer timeout.
  * 
- * @method module:buffer~Buffer#getTimeout
+ * @method module:buffer~AsyncBuffer#getTimeout
  * @returns {Number} Current timeout value
  */
-Buffer.prototype.getTimeout = function(){
+AsyncBuffer.prototype.getTimeout = function(){
     var $$ = this;
     return $$.timeout;
 };
@@ -220,10 +220,10 @@ Buffer.prototype.getTimeout = function(){
 /**
  * Check if buffer has something in at least one of its queues.
  * 
- * @method module:buffer~Buffer#isEmpty
+ * @method module:buffer~AsyncBuffer#isEmpty
  * @returns {Boolean} Empty or not?
  */
-Buffer.prototype.isEmpty = function(){
+AsyncBuffer.prototype.isEmpty = function(){
     var $$ = this;
 
     for(var id in $$.namedCallbacks){
@@ -239,10 +239,12 @@ Buffer.prototype.isEmpty = function(){
 };
 
 if (typeof define === 'function' && define.amd) {
-    define("Buffer", [], function () { return Buffer; });
+    define("AsyncBuffer", [], {
+        AsyncBuffer: AsyncBuffer
+    });
 } else if ('undefined' !== typeof exports && 'undefined' !== typeof module) {
-    module.exports = Buffer;
+    module.exports.AsyncBuffer = AsyncBuffer;
 } else {
-    window.Buffer = Buffer;
+    window.AsyncBuffer = AsyncBuffer;
 }
 
