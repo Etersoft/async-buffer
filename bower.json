@@ -1,0 +1,14 @@
+{
+  "name": "async-buffer",
+  "description": "Async buffer",
+  "main": "index.js",
+  "authors": [
+    "missingdays"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "buffer",
+    "async"
+  ],
+  "homepage": "https://github.com/Etersoft/async-buffer"
+}
