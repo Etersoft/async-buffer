@@ -1,7 +1,7 @@
 
 var assert = require("chai").assert;
 
-var Buffer = require("../buffer");
+var Buffer = require("../index");
 
 var MultipleDone = require("./utils").MultipleDone;
 

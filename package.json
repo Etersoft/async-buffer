@@ -2,7 +2,7 @@
   "name": "async-buffer",
   "version": "1.0.0",
   "description": "Async buffer",
-  "main": "buffer.js",
+  "main": "index.js",
   "directories": {
     "test": "test"
   },
