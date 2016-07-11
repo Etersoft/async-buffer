@@ -21,17 +21,17 @@ function AsyncBuffer(){
  */
 AsyncBuffer.prototype.start = function(){
 
-    var $$ = this;
+    var self = this;
 
-    if(!$$.waiting){
-        $$.waiting = true;
+    if(!self.waiting){
+        self.waiting = true;
         setTimeout(function(){
 
             // finish call be called manualy
-            if($$.waiting){
-                $$.finish();
+            if(self.waiting){
+                self.finish();
             }
-        }, $$.timeout);
+        }, self.timeout);
     }
 };
 
@@ -68,11 +68,11 @@ function resolveCallbacks(callbacks){
  * @private
  */
 AsyncBuffer.prototype.resolveNamedCallbacks = function(){
-    var $$ = this;
+    var self = this;
 
-    for(var id in $$.namedCallbacks){
-        var namedCallback = $$.namedCallbacks[id];
-        $$.namedCallbacks[id] = undefined;
+    for(var id in self.namedCallbacks){
+        var namedCallback = self.namedCallbacks[id];
+        self.namedCallbacks[id] = undefined;
         resolveCallback(namedCallback);
    }
 };
@@ -84,8 +84,8 @@ AsyncBuffer.prototype.resolveNamedCallbacks = function(){
  * @private
  */
 AsyncBuffer.prototype.resolveMainCallbacks = function(){
-    var $$ = this;
-    resolveCallbacks($$.callbacks);
+    var self = this;
+    resolveCallbacks(self.callbacks);
 };
 
 /**
@@ -95,8 +95,8 @@ AsyncBuffer.prototype.resolveMainCallbacks = function(){
  * @private
  */
 AsyncBuffer.prototype.resolveLastCallbacks = function(){
-    var $$ = this;
-    resolveCallbacks($$.lastCallbacks);
+    var self = this;
+    resolveCallbacks(self.lastCallbacks);
 };
 
 /**
@@ -107,13 +107,13 @@ AsyncBuffer.prototype.resolveLastCallbacks = function(){
  */
 
 AsyncBuffer.prototype.finish = function(){
-    var $$ = this;
+    var self = this;
 
-    $$.waiting = false;
+    self.waiting = false;
 
-    $$.resolveNamedCallbacks();
-    $$.resolveMainCallbacks();
-    $$.resolveLastCallbacks();
+    self.resolveNamedCallbacks();
+    self.resolveMainCallbacks();
+    self.resolveLastCallbacks();
 };
 
 /**
@@ -123,11 +123,11 @@ AsyncBuffer.prototype.finish = function(){
  * @returns {Number} How many times 'finish' was called
  */
 AsyncBuffer.prototype.finishAll = function(){
-    var $$ = this;
+    var self = this;
     var counter = 0;
 
-    while(!$$.isEmpty() && counter<10){
-        $$.finish();
+    while(!self.isEmpty() && counter<10){
+        self.finish();
         counter++;
     }
 
@@ -141,9 +141,9 @@ AsyncBuffer.prototype.finishAll = function(){
  * @param {Function} callback - Callback that will be added to queue
  */
 AsyncBuffer.prototype.onFinish = function(callback){
-    var $$ = this;
-    $$.start();
-    $$.callbacks.push(callback);
+    var self = this;
+    self.start();
+    self.callbacks.push(callback);
 };
 
 /**
@@ -159,9 +159,9 @@ AsyncBuffer.prototype.onFinish = function(callback){
  * @param {Function} callback - Callback that will be added to queue
  */
 AsyncBuffer.prototype.onLastFinish = function(id, callback){
-    var $$ = this;
-    $$.start();
-    $$.namedCallbacks[id] = callback;
+    var self = this;
+    self.start();
+    self.namedCallbacks[id] = callback;
 };
 
 /**
@@ -172,9 +172,9 @@ AsyncBuffer.prototype.onLastFinish = function(id, callback){
  * @param {Function} callback - Callback that will be added to queue.
  */
 AsyncBuffer.prototype.afterFinish = function(callback){
-    var $$ = this;
-    $$.start();
-    $$.lastCallbacks.push(callback);
+    var self = this;
+    self.start();
+    self.lastCallbacks.push(callback);
 };
 
 /**
@@ -186,8 +186,8 @@ AsyncBuffer.prototype.afterFinish = function(callback){
  * @return {Boolean} - Is in the queue?
  */
 AsyncBuffer.prototype.has = function(id){
-    var $$ = this;
-    return $$.namedCallbacks[id] !== undefined;
+    var self = this;
+    return self.namedCallbacks[id] !== undefined;
 };
 
 /**
@@ -197,12 +197,12 @@ AsyncBuffer.prototype.has = function(id){
  * @param {Number} timeout - New timeout value
  */
 AsyncBuffer.prototype.setTimeout = function(timeout){
-    var $$ = this;
+    var self = this;
     if(isNaN(timeout)){
         throw new Error('AsyncBuffer timeout should be a number');
     }
 
-    $$.timeout = timeout;
+    self.timeout = timeout;
 };
 
 
@@ -213,8 +213,8 @@ AsyncBuffer.prototype.setTimeout = function(timeout){
  * @returns {Number} Current timeout value
  */
 AsyncBuffer.prototype.getTimeout = function(){
-    var $$ = this;
-    return $$.timeout;
+    var self = this;
+    return self.timeout;
 };
 
 /**
@@ -224,16 +224,16 @@ AsyncBuffer.prototype.getTimeout = function(){
  * @returns {Boolean} Empty or not?
  */
 AsyncBuffer.prototype.isEmpty = function(){
-    var $$ = this;
+    var self = this;
 
-    for(var id in $$.namedCallbacks){
-        if($$.has(id)){
+    for(var id in self.namedCallbacks){
+        if(self.has(id)){
             return false;
         }
     }
 
-    var callbacks = $$.callbacks.length === 0;
-    var lastCallbacks = $$.lastCallbacks.length === 0;
+    var callbacks = self.callbacks.length === 0;
+    var lastCallbacks = self.lastCallbacks.length === 0;
 
     return callbacks && lastCallbacks;
 };
